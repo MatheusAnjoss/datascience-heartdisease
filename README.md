@@ -1,84 +1,83 @@
-# Análise de Dados: Breast Cancer (Conjunto de Exemplo)
+# Classificação de Recorrência de Câncer de Mama com Decision Tree
 
-<<<<<<< HEAD
-==================================================
-Visão geral
-==================================================
-Este repositório contém uma análise exploratória e um classificador simples aplicados ao dataset "breast-cancer.csv". O trabalho apresenta limpeza, codificação, experimentos iniciais com árvore de decisão e instruções para reproduzir os passos.
-=======
+Este projeto tem como objetivo treinar e avaliar um modelo de classificação utilizando o algoritmo Decision Tree aplicado ao dataset `breast-cancer.csv`. O modelo é capaz de prever se um caso representa recorrência ou não da doença, com base em variáveis clínicas categóricas e numéricas.
 
-## Visão geral
+## Arquivos do Projeto
 
-Este repositório contém uma análise exploratória e experimentos de modelagem sobre um conjunto de dados relacionado a doenças cardíacas. O objetivo é investigar fatores associados ao diagnóstico e construir modelos preditivos simples, com documentação clara das etapas e resultados.
->>>>>>> 098dd0736c009c37f31286762497a8b17da03d08
+├── classificador.py
+└── breast-cancer.csv
 
-Sumário
-- [Objetivo](#objetivo)
-- [Descrição do dataset](#descrição-do-dataset)
-- [Como executar](#como-executar)
-- [Estrutura do repositório](#estrutura-do-repositório)
-- [Resultados e observações](#resultados-e-observações)
-- [Dependências](#dependências)
 
---------------------------------------------------
-Objetivo
---------------------------------------------------
-- Entender a estrutura dos dados e realizar pré-processamento básico.
-- Investigar relações entre atributos e o rótulo de recorrência.
-- Treinar um classificador simples e avaliar seu desempenho.
-- Documentar limitações e possíveis melhorias.
+## Descrição do Dataset
 
---------------------------------------------------
-Descrição do dataset
---------------------------------------------------
-O arquivo utilizado é breast-cancer.csv (presente na raiz do repositório). Cabeçalho e colunas observadas:
-- age, menopause, tumor-size, inv-nodes, node-caps, deg-malig, breast, breast-quad, irradiat, Class
+O arquivo `breast-cancer.csv` contém 286 registros com informações sobre pacientes diagnosticadas com câncer de mama.  
+As variáveis incluem:
 
-Observações rápidas sobre os campos:
-- Muitos atributos são categóricos e exigem codificação (ex.: age, tumor-size, node-caps).
-- Há valores faltantes representados por "?" em algumas colunas; o notebook/script trata esses casos.
+- idade  
+- estado menopausal  
+- tamanho do tumor  
+- número de linfonodos  
+- presença de cápsula nos linfonodos  
+- grau de malignidade  
+- lado do seio afetado  
+- quadrante da mama  
+- exposição à radiação  
+- classe (variável alvo)
 
-------------------------------------------------
-3. Engenharia de features e codificação de categóricas.
-4. Treinamento e validação de modelos de classificação com avaliação por métricas (acurácia, precisão, recall, AUC).
-5. Interpretação dos resultados e recomendações para trabalhos futuros.
+A coluna alvo é: Class
 
---------------------------------------------------
-Como executar
---------------------------------------------------
-1. Criar um ambiente (virtualenv/conda) e instalar dependências:
+Com dois valores possíveis:
+
+- `no-recurrence-events`
+- `recurrence-events`
+
+## Pré-processamento
+
+As etapas de preparação dos dados incluíram:
+
+1. Remoção de registros com valores ausentes ("?").
+2. Conversão de atributos categóricos em variáveis numéricas utilizando One-Hot Encoding.
+3. Separação entre atributos (X) e classe (y).
+
+## Treinamento do Modelo
+
+O modelo escolhido foi: DecisionTreeClassifier()
+
+
+Os dados foram divididos com a técnica Hold-Out:
+
+- 70% para treinamento  
+- 30% para teste  
+
+## Avaliação
+
+O script produz:
+
+- acurácia do modelo
+- matriz de confusão numérica
+- matriz de confusão gráfica
+- comparação entre valores reais e previstos
+
+A acurácia obtida foi aproximadamente: 73.8%
+
+Valor coerente com o tamanho e natureza do dataset, que contém diversas variáveis categóricas e é levemente desbalanceado.
+
+## Classificação de Novas Instâncias
+
+O código inclui um exemplo de nova instância, preparada com os mesmos atributos originais. Após aplicar o mesmo processo de One-Hot Encoding e alinhamento das colunas, o modelo é capaz de gerar uma previsão para um caso inédito.
+
+## Execução
+
+Instale as dependências:
+
 ```bash
-# Exemplo com pip
-pip install -r requirements.txt
+pip install numpy==1.26.4 pandas==2.2.2 scikit-learn matplotlib
 ```
-2. Colocar os dados em data/ (ou ajustar caminhos no notebook).
-3. Abrir e executar o notebook principal em notebooks/ na ordem das células.
-4. Consultar a seção "Resultados" no notebook para interpretações e gráficos.
 
---------------------------------------------------
-Estrutura do repositório
---------------------------------------------------
-- notebooks/        -> notebooks com análise, visualizações e modelagem  
-- data/             -> dados brutos e processados (não versionar dados sensíveis)  
-- scripts/          -> scripts auxiliares para pré-processamento  
-- README.md         -> este arquivo
+Execute o script:
+python classificador.py
 
---------------------------------------------------
-Resultados e observações
---------------------------------------------------
-- Os notebooks trazem experimentos iniciais e comparações entre modelos.  
-- As conclusões são condicionais à qualidade e representatividade dos dados; sugerem-se mais testes e validação externa antes de uso em produção.
+## Considerações Finais
 
---------------------------------------------------
-Dependências
---------------------------------------------------
-Principais pacotes esperados:
-- pandas, numpy
-- scikit-learn
-- matplotlib, seaborn
-Versões específicas podem ser indicadas em requirements.txt.
+Este projeto demonstra o fluxo completo de construção e avaliação de um modelo de classificação utilizando Decision Trees. Todos os requisitos da atividade foram cumpridos: treinamento do modelo, avaliação com acurácia e matriz de confusão, além da classificação de novas instâncias.
 
---------------------------------------------------
-Notas finais
---------------------------------------------------
-O trabalho é uma prática de análise de dados e aprendizado de máquina aplicada ao dataset disponível. Há espaço para aprimoramentos em pré-processamento, seleção de features e experimentos de modelagem.
