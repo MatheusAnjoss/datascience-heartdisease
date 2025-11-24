@@ -1,9 +1,16 @@
 # Análise de Dados: Breast Cancer (Conjunto de Exemplo)
 
+<<<<<<< HEAD
 ==================================================
 Visão geral
 ==================================================
 Este repositório contém uma análise exploratória e um classificador simples aplicados ao dataset "breast-cancer.csv". O trabalho apresenta limpeza, codificação, experimentos iniciais com árvore de decisão e instruções para reproduzir os passos.
+=======
+
+## Visão geral
+
+Este repositório contém uma análise exploratória e experimentos de modelagem sobre um conjunto de dados relacionado a doenças cardíacas. O objetivo é investigar fatores associados ao diagnóstico e construir modelos preditivos simples, com documentação clara das etapas e resultados.
+>>>>>>> 098dd0736c009c37f31286762497a8b17da03d08
 
 Sumário
 - [Objetivo](#objetivo)
