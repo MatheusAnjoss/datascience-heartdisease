@@ -1,14 +1,13 @@
-# Análise de Dados: Doença Cardíaca
+# Análise de Dados: Breast Cancer (Conjunto de Exemplo)
 
 ==================================================
 Visão geral
 ==================================================
-Este repositório contém uma análise exploratória e experimentos de modelagem sobre um conjunto de dados relacionado a doenças cardíacas. O objetivo é investigar fatores associados ao diagnóstico e construir modelos preditivos simples, com documentação clara das etapas e resultados.
+Este repositório contém uma análise exploratória e um classificador simples aplicados ao dataset "breast-cancer.csv". O trabalho apresenta limpeza, codificação, experimentos iniciais com árvore de decisão e instruções para reproduzir os passos.
 
 Sumário
 - [Objetivo](#objetivo)
-- [Resumo dos dados](#resumo-dos-dados)
-- [Metodologia](#metodologia)
+- [Descrição do dataset](#descrição-do-dataset)
 - [Como executar](#como-executar)
 - [Estrutura do repositório](#estrutura-do-repositório)
 - [Resultados e observações](#resultados-e-observações)
@@ -17,21 +16,22 @@ Sumário
 --------------------------------------------------
 Objetivo
 --------------------------------------------------
-- Explorar e entender a estrutura do conjunto de dados.
-- Realizar limpeza e pré-processamento básicos.
-- Investigar relações entre variáveis clínicas e a presença de doença cardíaca.
-- Treinar e comparar modelos de classificação simples (ex.: regressão logística, árvore de decisão) e discutir limitações.
+- Entender a estrutura dos dados e realizar pré-processamento básico.
+- Investigar relações entre atributos e o rótulo de recorrência.
+- Treinar um classificador simples e avaliar seu desempenho.
+- Documentar limitações e possíveis melhorias.
 
 --------------------------------------------------
-Resumo dos dados
+Descrição do dataset
 --------------------------------------------------
-O dataset inclui variáveis demográficas e clínicos-exames relacionados ao diagnóstico de doença cardíaca (por exemplo: idade, sexo, pressão arterial, colesterol, resultados de teste de esforço). A descrição detalhada de cada coluna está disponível no notebook principal.
+O arquivo utilizado é breast-cancer.csv (presente na raiz do repositório). Cabeçalho e colunas observadas:
+- age, menopause, tumor-size, inv-nodes, node-caps, deg-malig, breast, breast-quad, irradiat, Class
 
---------------------------------------------------
-Metodologia
---------------------------------------------------
-1. Inspeção inicial e limpeza (tratamento de valores faltantes, tipos de variáveis).
-2. Análise exploratória: estatísticas descritivas e visualizações para entender distribuições e correlações.
+Observações rápidas sobre os campos:
+- Muitos atributos são categóricos e exigem codificação (ex.: age, tumor-size, node-caps).
+- Há valores faltantes representados por "?" em algumas colunas; o notebook/script trata esses casos.
+
+------------------------------------------------
 3. Engenharia de features e codificação de categóricas.
 4. Treinamento e validação de modelos de classificação com avaliação por métricas (acurácia, precisão, recall, AUC).
 5. Interpretação dos resultados e recomendações para trabalhos futuros.

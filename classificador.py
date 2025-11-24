@@ -3,7 +3,6 @@
 # ==========================================
 import pandas as pd
 import numpy as np
-import zipfile
 
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
@@ -13,45 +12,37 @@ import matplotlib.pyplot as plt
 
 
 # ==========================================
-# 2. ABRIR O ZIP E CARREGAR O DATASET
+# 2. CARREGAR OS DADOS
 # ==========================================
-zip_path = "heart disease.zip"  # <- ajuste se o path for outro
+dados = pd.read_csv("breast-cancer.csv")
 
-with zipfile.ZipFile(zip_path, 'r') as z:
-    # arquivo recomendado (limpo)
-    file_name = "processed.cleveland.data"
-    with z.open(file_name) as f:
-        dados = pd.read_csv(f, header=None)
+print("Primeiras linhas do dataset:")
+print(dados.head())
 
 
 # ==========================================
-# 3. DEFINIR AS COLUNAS DO DATASET
+# 3. TRATAMENTO DE DADOS
 # ==========================================
-colunas = [
-    "age","sex","cp","trestbps","chol","fbs","restecg","thalach",
-    "exang","oldpeak","slope","ca","thal","target"
-]
 
-dados.columns = colunas
-
-# Substituir "?" por NaN e remover linhas inválidas
+# Troca valores "?" por NaN
 dados = dados.replace("?", np.nan)
+
+# Remove registros incompletos
 dados = dados.dropna()
 
-# Converter colunas numéricas
-for col in colunas:
-    dados[col] = pd.to_numeric(dados[col])
+# Separa atributos e classe
+dados_atributos = dados.drop(columns=["Class"])
+dados_classes = dados["Class"]
+
+# One-Hot Encoding (necessário porque o dataset é categórico)
+dados_atributos = pd.get_dummies(dados_atributos)
+
+print("\nAtributos após One-Hot Encoding:")
+print(dados_atributos.head())
 
 
 # ==========================================
-# 4. SEGMENTAR ATRIBUTOS E CLASSE
-# ==========================================
-dados_atributos = dados.drop(columns=["target"])
-dados_classes = dados["target"]
-
-
-# ==========================================
-# 5. HOLD-OUT (70% treino / 30% teste)
+# 4. HOLD OUT (70% treino / 30% teste)
 # ==========================================
 atributos_train, atributos_test, classes_train, classes_test = train_test_split(
     dados_atributos, dados_classes, test_size=0.3, random_state=42
@@ -59,18 +50,18 @@ atributos_train, atributos_test, classes_train, classes_test = train_test_split(
 
 
 # ==========================================
-# 6. TREINAR MODELO (Decision Tree)
+# 5. TREINAR O MODELO DECISION TREE
 # ==========================================
 tree = DecisionTreeClassifier()
-heart_tree = tree.fit(atributos_train, classes_train)
+bc_tree = tree.fit(atributos_train, classes_train)
 
-print("Classes presentes no modelo:", heart_tree.classes_)
+print("\nClasses presentes no modelo:", bc_tree.classes_)
 
 
 # ==========================================
-# 7. PRETESTAR O MODELO
+# 6. PREVER TESTES
 # ==========================================
-predicoes = heart_tree.predict(atributos_test)
+predicoes = bc_tree.predict(atributos_test)
 
 print("\nComparação entre classe real e prevista:")
 for real, prev in zip(classes_test, predicoes):
@@ -78,31 +69,48 @@ for real, prev in zip(classes_test, predicoes):
 
 
 # ==========================================
-# 8. ACURÁCIA
+# 7. ACURÁCIA
 # ==========================================
-print("\nAcurácia global:", metrics.accuracy_score(classes_test, predicoes))
+acuracia = metrics.accuracy_score(classes_test, predicoes)
+print("\nAcurácia global:", acuracia)
 
 
 # ==========================================
-# 9. MATRIZ DE CONFUSÃO
+# 8. MATRIZ DE CONFUSÃO
 # ==========================================
-print("\nMatriz de Confusão (numérica):")
-print(confusion_matrix(classes_test, predicoes, labels=heart_tree.classes_))
-
-print("\nExibindo matriz de confusão gráfica...")
-cm = confusion_matrix(classes_test, predicoes, labels=heart_tree.classes_)
-disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=heart_tree.classes_)
+cm = confusion_matrix(classes_test, predicoes, labels=bc_tree.classes_)
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=bc_tree.classes_)
 disp.plot()
 plt.show()
 
+print("\nMatriz de Confusão (numérica):")
+print(cm)
 
 
 # ==========================================
-# 10. CLASSIFICAR UMA NOVA INSTÂNCIA
+# 9. CLASSIFICAR NOVA INSTÂNCIA
 # ==========================================
-# Exemplo fictício – substitua por novos valores
-nova_instancia = [[63, 1, 3, 145, 233, 1, 0, 150, 0, 2.3, 0, 0, 1]]
 
-classe_inferida = heart_tree.predict(nova_instancia)
-print("\nClasse inferida para nova instância:", classe_inferida)
+# Exemplo fictício (os valores precisam seguir o formato original do dataset)
+nova_instancia = {
+    "age": ["40-49"],
+    "menopause": ["premeno"],
+    "tumor-size": ["20-24"],
+    "inv-nodes": ["0-2"],
+    "node-caps": ["no"],
+    "deg-malig": [2],
+    "breast": ["left"],
+    "breast-quad": ["left_up"],
+    "irradiat": ["no"]
+}
 
+# Transforma em DataFrame
+nova_instancia_df = pd.DataFrame(nova_instancia)
+
+# One-Hot Encoding com alinhamento das colunas
+nova_instancia_df = pd.get_dummies(nova_instancia_df)
+nova_instancia_df = nova_instancia_df.reindex(columns=dados_atributos.columns, fill_value=0)
+
+classe_prevista = bc_tree.predict(nova_instancia_df)
+
+print("\nClasse prevista para nova instância:", classe_prevista)
